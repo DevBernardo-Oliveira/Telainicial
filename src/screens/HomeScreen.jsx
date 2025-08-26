@@ -1,320 +1,194 @@
-// src/screens/HomeScreen.jsx
+import React from 'react';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Importe o hook de navegação
+import { useTheme } from '../context/ThemeContext';
 
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  FlatList,
-  TextInput,
-  Alert,
-} from 'react-native';
+const HomeScreen = () => {
+  const navigation = useNavigation(); // Obtenha o objeto de navegação
+  const { colors, isDarkMode, toggleTheme } = useTheme();
 
-// Imagens exemplo de pets
-import dog1 from '../assets/dog1.png';
-import dog2 from '../assets/dog2.png';
-import cat1 from '../assets/cat1.png';
-
-export default function HomeScreen() {
-  const [pets, setPets] = useState([
-    {
-      id: '1',
-      nome: 'Cachorro',
-      servico: 'Consulta urgente',
-      horario: 'O mais antes possível',
-      image: dog1,
-      porte: 'Médio',
-      raca: 'Vira-lata',
-      detalhes: 'Um cachorro muito animado.',
-    },
-    {
-      id: '2',
-      nome: 'Cachorro',
-      servico: 'Vacinação',
-      horario: 'Manhã',
-      image: dog2,
-      porte: 'Pequeno',
-      raca: 'Poodle',
-      detalhes: 'Um poodle dócil e tranquilo.',
-    },
-    {
-      id: '3',
-      nome: 'Gato',
-      servico: 'Consulta urgente',
-      horario: 'Tarde',
-      image: cat1,
-      porte: 'Pequeno',
-      raca: 'Siamese',
-      detalhes: 'Um gato curioso e brincalhão.',
-    },
-  ]);
-  const [showAddForm, setShowAddForm] = useState(false);
-
-  // Estados do formulário de adicionar pet
-  const [nome, setNome] = useState('');
-  const [idade, setIdade] = useState('');
-  const [porte, setPorte] = useState('');
-  const [raca, setRaca] = useState('');
-  const [detalhes, setDetalhes] = useState('');
-
-  // Lógica para o botão de "Adicionar"
-  const handleAddPet = () => {
-    setShowAddForm(true);
-  };
-
-  // Lógica para salvar o pet
-  const handleSavePet = () => {
-    if (!nome || !idade || !porte || !raca) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
-    const newPet = {
-      id: Date.now().toString(), // ID único
-      nome,
-      idade,
-      porte,
-      raca,
-      detalhes,
-      servico: 'Novo serviço', // Exemplo de um novo valor
-      horario: 'A definir',
-      image: dog1, // Use uma imagem padrão por enquanto
-    };
-
-    setPets([...pets, newPet]);
-    setShowAddForm(false);
-    
-    // Limpar o formulário
-    setNome('');
-    setIdade('');
-    setPorte('');
-    setRaca('');
-    setDetalhes('');
-  };
-
-  // Lógica para cancelar a adição
-  const handleCancelAdd = () => {
-    setShowAddForm(false);
-    
-    // Limpar o formulário
-    setNome('');
-    setIdade('');
-    setPorte('');
-    setRaca('');
-    setDetalhes('');
+  const handleBackPress = () => {
+    navigation.goBack(); // Volta para a tela anterior na pilha
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Meus Pets</Text>
-      </View>
+    <View style={styles.container(colors)}>
+      {/* Imagem de fundo que ocupa a tela inteira */}
+      <Image
+        source={require('../assets/gatogrande.png')}
+        style={styles.fullScreenImage}
+        accessibilityLabel="Desenho de uma pessoa com um gato"
+      />
 
-      {!showAddForm ? (
-        <>
-          <FlatList
-            data={pets}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.petCard}>
-                <Image source={item.image} style={styles.petImage} />
-                <View style={styles.petInfo}>
-                  <Text style={styles.petName}>{item.nome}</Text>
-                  <Text style={styles.petDetail}>{item.servico}</Text>
-                  <Text style={styles.petDetail}>{item.horario}</Text>
-                </View>
-              </View>
-            )}
+      {/* O container de login completo sobre a imagem */}
+      <View style={styles.loginContainer(colors)}>
+        {/* Logo Pet Vita agora é uma imagem */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../assets/petvita.png')} // Caminho da nova imagem
+            style={styles.logoImage}
+            accessibilityLabel="Logo Pet Vita com desenhos de um cachorro e um gato"
           />
-          <TouchableOpacity style={styles.addButton} onPress={handleAddPet}>
-            <Text style={styles.addButtonText}>Adicionar Pet</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <View style={styles.formContainer}>
-          <Text style={styles.formTitle}>Adicionar Novo Pet</Text>
-          
-          <Text style={styles.label}>Nome</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome do pet"
-            value={nome}
-            onChangeText={setNome}
-          />
-          
-          <Text style={styles.label}>Idade</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Idade do pet"
-            keyboardType="numeric"
-            value={idade}
-            onChangeText={setIdade}
-          />
-          
-          <Text style={styles.label}>Porte</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Pequeno, Médio, Grande"
-            value={porte}
-            onChangeText={setPorte}
-          />
-          
-          <Text style={styles.label}>Raça</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Raça do pet"
-            value={raca}
-            onChangeText={setRaca}
-          />
-          
-          <Text style={styles.label}>Detalhes</Text>
-          <TextInput
-            style={styles.textArea}
-            placeholder="Detalhes adicionais"
-            multiline
-            numberOfLines={4}
-            value={detalhes}
-            onChangeText={setDetalhes}
-          />
-          
-          <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.cancelButton} onPress={handleCancelAdd}>
-              <Text style={styles.cancelButtonText}>Cancelar</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.saveButton} onPress={handleSavePet}>
-              <Text style={styles.saveButtonText}>Salvar</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      )}
-    </SafeAreaView>
+
+        {/* Campo de Email */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label(colors)}>Email</Text>
+          <TextInput
+            style={styles.input(colors)}
+            placeholder="Exemplo@gmail.com"
+            placeholderTextColor={colors.registerText}
+            keyboardType="email-address"
+          />
+        </View>
+
+        {/* Campo de Senha */}
+        <View style={styles.formGroup}>
+          <Text style={styles.label(colors)}>Password</Text>
+          <TextInput
+            style={styles.input(colors)}
+            placeholder="Senha"
+            placeholderTextColor={colors.registerText}
+            secureTextEntry
+          />
+        </View>
+
+        {/* Lembre-me e Esqueci a Senha */}
+        <View style={styles.rememberForgotContainer}>
+          <View style={styles.rememberMeContainer}>
+            <TouchableOpacity style={styles.checkbox}></TouchableOpacity>
+            <Text style={styles.rememberMeText(colors)}>Lembre-me</Text>
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.forgotPasswordText(colors)}>Esqueci a Senha</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Botão Entrar */}
+        <TouchableOpacity style={styles.loginButton(colors)}>
+          <Text style={styles.loginButtonText(colors)}>Entrar</Text>
+        </TouchableOpacity>
+
+        {/* Botão Voltar */}
+        <TouchableOpacity style={styles.backButton(colors)} onPress={handleBackPress}>
+          <Text style={styles.backButtonText(colors)}>Voltar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  container: (colors) => ({
     flex: 1,
-    backgroundColor: '#F5F5F5',
-  },
-  header: {
-    backgroundColor: '#FFE4B5', // Adjusted to a softer and less orange yellow
-    padding: 25,
+    justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: '#FFDAB9', // Updated border color to match the softer yellow
+    backgroundColor: colors.background,
+  }),
+  fullScreenImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    opacity: 0.7,
   },
-  title: {
-    fontSize: 26, // Slightly larger font size for better readability
-    fontWeight: 'bold',
-    color: '#333',
-    textShadowColor: '#FFA500', // Added text shadow for a subtle effect
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-  },
-  petCard: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 15, // Increased border radius for a softer look
-    padding: 20, // Increased padding for better spacing
-    marginHorizontal: 20,
-    marginTop: 20,
+  loginContainer: (colors) => ({
+    width: '90%',
+    maxWidth: 400,
+    backgroundColor: colors.cardBackground,
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 }, // Increased shadow for more depth
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  petImage: {
-    width: 70, // Slightly larger image size
-    height: 70,
-    borderRadius: 35,
-  },
-  petName: {
-    fontSize: 20, // Larger font size for better emphasis
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  petDetail: {
-    fontSize: 16, // Slightly larger font size for better readability
-    color: '#666',
-    marginTop: 4, // Increased margin for better spacing
-  },
-  addButton: {
-    backgroundColor: '#5B51EF',
-    borderRadius: 10,
-    padding: 15,
-    margin: 20,
+    shadowRadius: 10,
+    elevation: 5,
+  }),
+  logoContainer: {
+    marginBottom: 40,
     alignItems: 'center',
   },
-  addButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  formContainer: {
-    padding: 20,
-  },
-  formTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
-  },
-  label: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 5,
-  },
-  input: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#DDD',
-  },
-  textArea: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#DDD',
+  logoImage: {
+    width: 250,
     height: 100,
-    textAlignVertical: 'top',
+    resizeMode: 'contain',
   },
-  buttonRow: {
+  formGroup: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  label: (colors) => ({
+    fontSize: 14,
+    color: colors.cardTitle,
+    marginBottom: 5,
+    fontWeight: '500',
+  }),
+  input: (colors) => ({
+    width: '100%',
+    height: 50,
+    backgroundColor: colors.cardBorder,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: colors.registerText,
+  }),
+  rememberForgotContainer: {
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
   },
-  saveButton: {
-    backgroundColor: '#5B51EF',
-    borderRadius: 10,
-    padding: 15,
-    flex: 1,
-    marginLeft: 10,
+  rememberMeContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  saveButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cancelButton: {
-    backgroundColor: '#FF6B6B',
-    borderRadius: 10,
-    padding: 15,
-    flex: 1,
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
     marginRight: 10,
+  },
+  rememberMeText: (colors) => ({
+    fontSize: 14,
+    color: colors.registerText,
+  }),
+  forgotPasswordText: (colors) => ({
+    fontSize: 14,
+    color: colors.registerLink,
+    fontWeight: '600',
+  }),
+  loginButton: (colors) => ({
+    width: '100%',
+    height: 50,
+    backgroundColor: colors.loginButton,
+    borderRadius: 15,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  cancelButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    marginBottom: 15,
+  }),
+  loginButtonText: (colors) => ({
+    color: colors.loginButtonText,
+    fontSize: 18,
     fontWeight: 'bold',
-  },
+  }),
+  backButton: (colors) => ({
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  backButtonText: (colors) => ({
+    color: colors.registerLink,
+    fontSize: 16,
+    fontWeight: '600',
+  }),
 });
+
+export default HomeScreen;
