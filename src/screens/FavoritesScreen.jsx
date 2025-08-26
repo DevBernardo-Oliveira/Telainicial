@@ -1,7 +1,4 @@
 import React from 'react';
-
-
-
 import { View, Text, Image, StyleSheet, Pressable, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -14,10 +11,9 @@ const FavoriteScreen = () => {
     navigation.navigate('HomeScreen');
   };
 
-  // Função para lidar com o clique no link "Cadastre-se".
   const handleRegisterPress = () => {
-    console.log('Link "Cadastre-se" pressionado!');
-    // Exemplo: navigation.navigate('RegisterScreen');
+
+    navigation.navigate('Petscreen');
   };
 
   return (
@@ -25,7 +21,7 @@ const FavoriteScreen = () => {
     <View style={styles.container(colors)}>
       {/* Imagem de fundo referenciada pela variável `gatogrande`. */}
       <Image
-        source={require('../assets/gatogrande.png')}
+        source={require('../assets/Vector.png')}
         style={styles.backgroundImage}
         accessibilityLabel="Desenho de uma pessoa com um gato"
       />
@@ -58,15 +54,16 @@ const FavoriteScreen = () => {
             <Text style={styles.loginButtonText(colors)}>Entrar</Text>
           </TouchableOpacity>
           {/* Link para "Cadastre-se" */}
-          <Text style={styles.registerText(colors)}>
-            Não tem uma Conta?
-            <Text
-              onPress={handleRegisterPress}
-              style={styles.registerLink(colors)}
-            >
-              Cadastre-se
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+            <Text style={styles.registerText(colors)}>
+              Não tem uma Conta?
             </Text>
-          </Text>
+            <TouchableOpacity onPress={handleRegisterPress}>
+              <Text style={styles.registerLink(colors)}>
+                Cadastre-se
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -91,8 +88,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    opacity: 0.7,
-    zIndex: 0,
+    opacity: 1,
+    zIndex: 1,
   },
   logoContainer: {
     textAlign: 'center',

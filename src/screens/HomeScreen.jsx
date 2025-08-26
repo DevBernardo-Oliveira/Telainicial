@@ -15,7 +15,7 @@ const HomeScreen = () => {
     <View style={styles.container(colors)}>
       {/* Imagem de fundo que ocupa a tela inteira */}
       <Image
-        source={require('../assets/gatogrande.png')}
+        source={require('../assets/Vector.png')}
         style={styles.fullScreenImage}
         accessibilityLabel="Desenho de uma pessoa com um gato"
       />
@@ -25,7 +25,7 @@ const HomeScreen = () => {
         {/* Logo Pet Vita agora é uma imagem */}
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/petvita.png')} // Caminho da nova imagem
+            source={require('../assets/petvita2.png')} // Caminho da nova imagem
             style={styles.logoImage}
             accessibilityLabel="Logo Pet Vita com desenhos de um cachorro e um gato"
           />
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    opacity: 0.7,
+    opacity: 1,
   },
   loginContainer: (colors) => ({
     width: '90%',

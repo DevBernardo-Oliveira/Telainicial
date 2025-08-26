@@ -1,124 +1,200 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
-const PetScreen = () => {
+const Petscreen = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Handles the "Cadastrar" (Register) button click.
+  const handleRegister = () => {
+    console.log('Register button clicked!');
+    // In a real application, you would handle form submission here.
+    // For this example, we'll just log the form data.
+    console.log({
+
+      name,
+      email,
+      phone,
+      password,
+    });
+  };
+
+  const navigation = useNavigation();
+  const { colors, isDarkMode, toggleTheme } = useTheme();
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Pet Photo */}
-        <View style={styles.imageContainer}>
+    <View style={styles.container(colors)}>
+      <Image
+        source={require('../assets/Vector.png')}
+        style={styles.fullScreenImage}
+        accessibilityLabel="Desenho de uma pessoa com um gato"
+      />
+
+      <View style={styles.loginContainer(colors)}>
+        <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/pet.png')} // Replace with actual pet image source
-            style={styles.petImage}
+            source={require('../assets/petvita2.png')}
+            style={styles.logoImage}
+            accessibilityLabel="Logo Pet Vita com desenhos de um cachorro e um gato"
           />
         </View>
 
-        {/* Input Fields */}
-        <Text style={styles.label}>Nome</Text>
-        <TextInput style={styles.inputField} placeholder="Nome do Pet" />
-
-        <Text style={styles.label}>Idade</Text>
-        <TextInput style={styles.inputField} placeholder="Idade do Pet" keyboardType="numeric" />
-
-        <Text style={styles.label}>Porte</Text>
-        <TextInput style={styles.inputField} placeholder="Porte do Pet" />
-
-        <Text style={styles.label}>Raça</Text>
-        <TextInput style={styles.inputField} placeholder="Raça do Pet" />
-
-        <Text style={styles.label}>Detalhes</Text>
-        <TextInput
-          style={[styles.inputField, styles.multilineInput]}
-          placeholder="Detalhes adicionais"
-          multiline
-          numberOfLines={4}
-        />
-
-        {/* Action Buttons */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.buttonText}>Salvar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelButton}>
-            <Text style={styles.buttonText}>Cancelar</Text>
-          </TouchableOpacity>
+        <View style={styles.formGroup}>
+          <Text style={styles.label(colors)}>Nome</Text>
+          <TextInput
+            style={styles.input(colors)}
+            placeholder="Nome"
+            placeholderTextColor={colors.registerText}
+            value={name}
+            onChangeText={setName}
+          />
         </View>
-      </ScrollView>
 
-      {/* Bottom Navigation Bar */}
-      
+        <View style={styles.formGroup}>
+          <Text style={styles.label(colors)}>Email</Text>
+          <TextInput
+            style={styles.input(colors)}
+            placeholder="Exemplo@gmail.com"
+            placeholderTextColor={colors.registerText}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+
+        <View style={styles.formGroup}>
+          <Text style={styles.label(colors)}>Telefone</Text>
+          <TextInput
+            style={styles.input(colors)}
+            placeholder="00 00000-0000"
+            placeholderTextColor={colors.registerText}
+            keyboardType="phone-pad"
+            value={phone}
+            onChangeText={setPhone}
+          />
+        </View>
+
+        <View style={styles.formGroup}>
+          <Text style={styles.label(colors)}>Senha</Text>
+          <TextInput
+            style={styles.input(colors)}
+            placeholder="Senha"
+            placeholderTextColor={colors.registerText}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+        </View>
+        
+        <TouchableOpacity
+          onPress={handleRegister}
+          style={styles.registerButton(colors)}
+        >
+          <Text style={styles.registerButtonText(colors)}>Cadastrar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={handleBack}
+          style={styles.backButton(colors)}
+        >
+          <Text style={styles.backButtonText(colors)}>Voltar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
+  container: (colors) => ({
     flex: 1,
-    backgroundColor: '#FFF6D5',
-  },
-  scrollContent: {
-    padding: 20,
-    paddingBottom: 100, // Ensure content is not hidden by bottom navigation
-  },
-  imageContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    backgroundColor: colors.background,
+  }),
+  fullScreenImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    opacity: 1,
   },
-  petImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 4,
-    borderColor: 'white',
+  loginContainer: (colors) => ({
+    width: '90%',
+    maxWidth: 400,
+    backgroundColor: colors.cardBackground,
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+  }),
+  logoContainer: {
+    marginBottom: 40,
+    alignItems: 'center',
   },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 5,
-    color: '#333',
-  },
-  inputField: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 10,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  multilineInput: {
+  logoImage: {
+    width: 250,
     height: 100,
-    textAlignVertical: 'top',
+    resizeMode: 'contain',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
+  formGroup: {
+    width: '100%',
     marginBottom: 20,
   },
-  saveButton: {
-    backgroundColor: '#4CAF50',
-    padding: 15,
+  label: (colors) => ({
+    fontSize: 14,
+    color: colors.cardTitle,
+    marginBottom: 5,
+    fontWeight: '500',
+  }),
+  input: (colors) => ({
+    width: '100%',
+    height: 50,
+    backgroundColor: colors.cardBorder,
     borderRadius: 10,
-    flex: 1,
-    marginRight: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: colors.registerText,
+  }),
+  registerButton: (colors) => ({
+    width: '100%',
+    height: 50,
+    backgroundColor: colors.loginButton,
+    borderRadius: 15,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: '#F44336',
-    padding: 15,
-    borderRadius: 10,
-    flex: 1,
-    marginLeft: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
+    marginBottom: 15,
+  }),
+  registerButtonText: (colors) => ({
+    color: colors.loginButtonText,
     fontSize: 18,
     fontWeight: 'bold',
-  },
+  }),
+  backButton: (colors) => ({
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  backButtonText: (colors) => ({
+    color: colors.registerLink,
+    fontSize: 16,
+    fontWeight: '600',
+  }),
 });
 
-export default PetScreen;
+export default Petscreen;
