@@ -3,17 +3,17 @@ import { View, Text, Image, StyleSheet, Pressable, SafeAreaView, TouchableOpacit
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 
-const FavoriteScreen = () => {
+const InicialScreen = () => {
   const navigation = useNavigation();
-  const { colors, isDarkMode, toggleTheme } = useTheme();
+  const { colors } = useTheme();
   // Função para lidar com o clique no botão "Entrar".
   const handleLoginPress = () => {
-    navigation.navigate('HomeScreen');
+    navigation.navigate('LoginScreen');
   };
 
   const handleRegisterPress = () => {
 
-    navigation.navigate('Petscreen');
+    navigation.navigate('CadastroScreen');
   };
 
   return (
@@ -28,9 +28,7 @@ const FavoriteScreen = () => {
 
       {/* O texto do logo principal "Pet" e "Vita" */}
       <View style={styles.logoContainer}>
-        <TouchableOpacity onPress={toggleTheme} style={styles.themeToggle}>
-          <Text style={styles.themeToggleText}>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</Text>
-        </TouchableOpacity>
+
         <Text style={styles.petText(colors)}>
           Pet
           <Text style={styles.vitaText(colors)}>
@@ -168,19 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.registerLink,
   }),
-  themeToggle: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    padding: 10,
-    borderRadius: 10,
-    zIndex: 30,
-  },
-  themeToggleText: {
-    color: '#000',
-    fontWeight: 'bold',
-  },
+
 });
 
-export default FavoriteScreen;
+export default InicialScreen;

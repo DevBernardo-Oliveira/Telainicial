@@ -1,63 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'; // Importe o hook de navegação
 import { useTheme } from '../context/ThemeContext';
 
-const Petscreen = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
+const LoginScreen = () => {
+  const navigation = useNavigation(); // Obtenha o objeto de navegação
+  const { colors } = useTheme();
 
-  // Handles the "Cadastrar" (Register) button click.
-  const handleRegister = () => {
-    console.log('Register button clicked!');
-    // In a real application, you would handle form submission here.
-    // For this example, we'll just log the form data.
-    console.log({
-
-      name,
-      email,
-      phone,
-      password,
-    });
-  };
-
-  const navigation = useNavigation();
-  const { colors, isDarkMode, toggleTheme } = useTheme();
-
-  const handleBack = () => {
-    navigation.goBack();
+  const handleBackPress = () => {
+    navigation.goBack(); // Volta para a tela anterior na pilha
   };
 
   return (
     <View style={styles.container(colors)}>
+      {/* Imagem de fundo que ocupa a tela inteira */}
       <Image
         source={require('../assets/Vector.png')}
         style={styles.fullScreenImage}
         accessibilityLabel="Desenho de uma pessoa com um gato"
       />
 
+      {/* O container de login completo sobre a imagem */}
       <View style={styles.loginContainer(colors)}>
+        {/* Logo Pet Vita agora é uma imagem */}
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/petvita2.png')}
+            source={require('../assets/petvita2.png')} // Caminho da nova imagem
             style={styles.logoImage}
             accessibilityLabel="Logo Pet Vita com desenhos de um cachorro e um gato"
           />
         </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label(colors)}>Nome</Text>
-          <TextInput
-            style={styles.input(colors)}
-            placeholder="Nome"
-            placeholderTextColor={colors.registerText}
-            value={name}
-            onChangeText={setName}
-          />
-        </View>
-
+        {/* Campo de Email */}
         <View style={styles.formGroup}>
           <Text style={styles.label(colors)}>Email</Text>
           <TextInput
@@ -65,52 +39,47 @@ const Petscreen = () => {
             placeholder="Exemplo@gmail.com"
             placeholderTextColor={colors.registerText}
             keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
+            maxLength={35} // Limit email to 35 characters
+            autoCapitalize="none"
           />
         </View>
 
+        {/* Campo de Senha */}
         <View style={styles.formGroup}>
-          <Text style={styles.label(colors)}>Telefone</Text>
-          <TextInput
-            style={styles.input(colors)}
-            placeholder="00 00000-0000"
-            placeholderTextColor={colors.registerText}
-            keyboardType="phone-pad"
-            value={phone}
-            onChangeText={setPhone}
-          />
-        </View>
-
-        <View style={styles.formGroup}>
-          <Text style={styles.label(colors)}>Senha</Text>
+          <Text style={styles.label(colors)}>Password</Text>
           <TextInput
             style={styles.input(colors)}
             placeholder="Senha"
             placeholderTextColor={colors.registerText}
             secureTextEntry
-            value={password}
-            onChangeText={setPassword}
+            maxLength={20} // Limit password to 20 characters
           />
         </View>
-        
-        <TouchableOpacity
-          onPress={handleRegister}
-          style={styles.registerButton(colors)}
-        >
-          <Text style={styles.registerButtonText(colors)}>Cadastrar</Text>
+
+        {/* Lembre-me e Esqueci a Senha */}
+        <View style={styles.rememberForgotContainer}>
+          <View style={styles.rememberMeContainer}>
+            <TouchableOpacity style={styles.checkbox}></TouchableOpacity>
+            <Text style={styles.rememberMeText(colors)}>Lembre-me</Text>
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.forgotPasswordText(colors)}>Esqueci a Senha</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Botão Entrar */}
+        <TouchableOpacity style={styles.loginButton(colors)} onPress={() => navigation.navigate('HomeScreen')}>
+          <Text style={styles.loginButtonText(colors)}>Entrar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={handleBack}
-          style={styles.backButton(colors)}
-        >
+        {/* Botão Voltar */}
+        <TouchableOpacity style={styles.backButton(colors)} onPress={handleBackPress}>
           <Text style={styles.backButtonText(colors)}>Voltar</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: (colors) => ({
@@ -170,7 +139,35 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.registerText,
   }),
-  registerButton: (colors) => ({
+  rememberForgotContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  rememberMeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginRight: 10,
+  },
+  rememberMeText: (colors) => ({
+    fontSize: 14,
+    color: colors.registerText,
+  }),
+  forgotPasswordText: (colors) => ({
+    fontSize: 14,
+    color: colors.registerLink,
+    fontWeight: '600',
+  }),
+  loginButton: (colors) => ({
     width: '100%',
     height: 50,
     backgroundColor: colors.loginButton,
@@ -179,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   }),
-  registerButtonText: (colors) => ({
+  loginButtonText: (colors) => ({
     color: colors.loginButtonText,
     fontSize: 18,
     fontWeight: 'bold',
@@ -197,4 +194,4 @@ const styles = StyleSheet.create({
   }),
 });
 
-export default Petscreen;
+export default LoginScreen;

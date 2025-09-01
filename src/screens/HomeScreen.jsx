@@ -1,194 +1,308 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Importe o hook de navegação
-import { useTheme } from '../context/ThemeContext';
+import { Image } from 'react-native';
+
+// Simulação do hook useTheme para o código ser executável
+const useTheme = () => ({
+  colors: {
+    background: '#FEFBF6',
+    textPrimary: '#3C3633',
+    textSecondary: '#7D7C7C',
+    primary: '#7F57F1',
+    cardBackground: '#FFF7F1',
+    cardShadow: 'rgba(0, 0, 0, 0.05)',
+    navBackground: '#FFFFFF',
+  }
+});
 
 const HomeScreen = () => {
-  const navigation = useNavigation(); // Obtenha o objeto de navegação
-  const { colors, isDarkMode, toggleTheme } = useTheme();
-
-  const handleBackPress = () => {
-    navigation.goBack(); // Volta para a tela anterior na pilha
-  };
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   return (
-    <View style={styles.container(colors)}>
-      {/* Imagem de fundo que ocupa a tela inteira */}
-      <Image
-        source={require('../assets/Vector.png')}
-        style={styles.fullScreenImage}
-        accessibilityLabel="Desenho de uma pessoa com um gato"
-      />
+    <div style={styles.container}>
+      {/* Cabeçalho */}
+      <header style={styles.header}>
+        <h1 style={styles.title}>Olá Usuário!</h1>
+        <p style={styles.subtitle}>Bom Dia!</p>
+      </header>
 
-      {/* O container de login completo sobre a imagem */}
-      <View style={styles.loginContainer(colors)}>
-        {/* Logo Pet Vita agora é uma imagem */}
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/petvita2.png')} // Caminho da nova imagem
-            style={styles.logoImage}
-            accessibilityLabel="Logo Pet Vita com desenhos de um cachorro e um gato"
-          />
-        </View>
+      {/* Card Principal */}
+      <div style={styles.promoCard}>
+        <div style={styles.promoTextContainer}>
+          <h2 style={styles.promoTitle}>Visite nosso Website</h2>
+          <button style={styles.promoButton}>Clique Aqui</button>
+        </div>
+        {/* Placeholder para a imagem do card */}
+        <Image source={require('../assets/DogCat.png')} style={styles.promoImage} />
+      </div>
 
-        {/* Campo de Email */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label(colors)}>Email</Text>
-          <TextInput
-            style={styles.input(colors)}
-            placeholder="Exemplo@gmail.com"
-            placeholderTextColor={colors.registerText}
-            keyboardType="email-address"
-          />
-        </View>
+      {/* Seção de Categorias */}
+      <section style={styles.categorySection}>
+        <div style={styles.sectionHeader}>
+          <h3 style={styles.sectionTitle}>Category</h3>
+        </div>
+        <div style={styles.categoryGrid}>
+          <CategoryButton icon="pets" label="Pets" colors={colors} />
+          <CategoryButton icon="care" label="Cuidados" colors={colors} />
+          <CategoryButton icon="consultation" label="Consulta" colors={colors} />
+          <CategoryButton icon="profile" label="Perfil" colors={colors} />
+        </div>
+      </section>
 
-        {/* Campo de Senha */}
-        <View style={styles.formGroup}>
-          <Text style={styles.label(colors)}>Password</Text>
-          <TextInput
-            style={styles.input(colors)}
-            placeholder="Senha"
-            placeholderTextColor={colors.registerText}
-            secureTextEntry
-          />
-        </View>
+      {/* Seção de Consultas */}
+      <section style={styles.consultasSection}>
+        <div style={styles.sectionHeader}>
+          <h3 style={styles.sectionTitle}>Consultas</h3>
+          <a href="#" style={styles.seeAllLink}>Ver Todas</a>
+        </div>
+        <div style={styles.consultaCard}>
+           {/* source={require('../assets/doctor_avatar.png')} */}
+          <div style={styles.doctorImagePlaceholder}></div>
+          <div style={styles.doctorInfo}>
+            <p style={styles.doctorName}>drh. Ariyo Hartono</p>
+            <p style={styles.doctorSpec}>Dentista Veterinario</p>
+          </div>
+          <div style={styles.arrowIcon}>&gt;</div>
+        </div>
+      </section>
 
-        {/* Lembre-me e Esqueci a Senha */}
-        <View style={styles.rememberForgotContainer}>
-          <View style={styles.rememberMeContainer}>
-            <TouchableOpacity style={styles.checkbox}></TouchableOpacity>
-            <Text style={styles.rememberMeText(colors)}>Lembre-me</Text>
-          </View>
-          <TouchableOpacity>
-            <Text style={styles.forgotPasswordText(colors)}>Esqueci a Senha</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Botão Entrar */}
-        <TouchableOpacity style={styles.loginButton(colors)}>
-          <Text style={styles.loginButtonText(colors)}>Entrar</Text>
-        </TouchableOpacity>
-
-        {/* Botão Voltar */}
-        <TouchableOpacity style={styles.backButton(colors)} onPress={handleBackPress}>
-          <Text style={styles.backButtonText(colors)}>Voltar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      {/* Barra de Navegação Inferior */}
+      <footer style={styles.navBar}>
+        <Image source={require('../assets/Pets.png')} style={styles.navIcon} />
+        <Image source={require('../assets/MaoBranca.png')} style={styles.navIcon} />
+        <div style={styles.navCenterButton}>
+          <Image source={require('../assets/Vector.png')} style={styles.navCenterIcon} />
+        </div>
+        <Image source={require('../assets/Veterinario.png')} style={styles.navIcon} />
+        <Image source={require('../assets/Configuracao.png')} style={styles.navIcon} />
+      </footer>
+    </div>
   );
 };
 
-const styles = StyleSheet.create({
-  container: (colors) => ({
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+// Componente para os botões de categoria
+const CategoryButton = ({ icon, label, colors }) => {
+  const styles = getStyles(colors);
+  let imageSource;
+  switch (icon) {
+    case 'pets':
+      imageSource = require('../assets/Pets.png');
+      break;
+    case 'care':
+      imageSource = require('../assets/MaoBranca.png');
+      break;
+    case 'consultation':
+      imageSource = require('../assets/Veterinario.png');
+      break;
+    case 'profile':
+      imageSource = require('../assets/Configuracao.png');
+      break;
+    default:
+      imageSource = null;
+  }
+
+  return (
+    <div style={styles.categoryButton}>
+      <div style={styles.categoryIconContainer}>
+        {imageSource && <Image source={imageSource} style={styles.categoryIcon} />}
+      </div>
+      <p style={styles.categoryLabel}>{label}</p>
+    </div>
+  );
+};
+
+
+// Função para gerar os estilos
+const getStyles = (colors) => ({
+  container: {
+    fontFamily: "'Inter', sans-serif",
     backgroundColor: colors.background,
-  }),
-  fullScreenImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    opacity: 1,
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '24px',
+    boxSizing: 'border-box',
+    position: 'relative',
+    paddingBottom: '100px', // Espaço para a navbar
   },
-  loginContainer: (colors) => ({
-    width: '90%',
-    maxWidth: 400,
-    backgroundColor: colors.cardBackground,
-    borderRadius: 20,
-    padding: 30,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5,
-  }),
-  logoContainer: {
-    marginBottom: 40,
-    alignItems: 'center',
+  header: {
+    marginBottom: '24px',
   },
-  logoImage: {
-    width: 250,
-    height: 100,
-    resizeMode: 'contain',
+  title: {
+    fontSize: '28px',
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    margin: 0,
   },
-  formGroup: {
-    width: '100%',
-    marginBottom: 20,
+  subtitle: {
+    fontSize: '18px',
+    color: colors.textSecondary,
+    margin: 0,
   },
-  label: (colors) => ({
-    fontSize: 14,
-    color: colors.cardTitle,
-    marginBottom: 5,
-    fontWeight: '500',
-  }),
-  input: (colors) => ({
-    width: '100%',
-    height: 50,
-    backgroundColor: colors.cardBorder,
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: colors.registerText,
-  }),
-  rememberForgotContainer: {
-    width: '100%',
-    flexDirection: 'row',
+  promoCard: {
+    backgroundColor: colors.primary,
+    borderRadius: '24px',
+    padding: '20px',
+    display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 30,
+    color: '#FFFFFF',
+    marginBottom: '32px',
   },
-  rememberMeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  promoTextContainer: {
+    maxWidth: '50%',
   },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginRight: 10,
-  },
-  rememberMeText: (colors) => ({
-    fontSize: 14,
-    color: colors.registerText,
-  }),
-  forgotPasswordText: (colors) => ({
-    fontSize: 14,
-    color: colors.registerLink,
-    fontWeight: '600',
-  }),
-  loginButton: (colors) => ({
-    width: '100%',
-    height: 50,
-    backgroundColor: colors.loginButton,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-  }),
-  loginButtonText: (colors) => ({
-    color: colors.loginButtonText,
-    fontSize: 18,
+  promoTitle: {
+    fontSize: '20px',
     fontWeight: 'bold',
-  }),
-  backButton: (colors) => ({
-    width: '100%',
-    height: 50,
+    margin: '0 0 16px 0',
+  },
+  promoButton: {
+    backgroundColor: '#FFFFFF',
+    color: colors.primary,
+    border: 'none',
+    borderRadius: '16px',
+    padding: '10px 20px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+  },
+  promoImage: {
+    width: '150px',
+    height: '120px',
+    borderRadius: '16px',
+    resizeMode: 'contain',
+  },
+  sectionHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '16px',
+  },
+  sectionTitle: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    margin: 0,
+  },
+  seeAllLink: {
+    fontSize: '14px',
+    color: colors.primary,
+    textDecoration: 'none',
+    fontWeight: 'bold',
+  },
+  categoryGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '16px',
+    marginBottom: '32px',
+  },
+  categoryButton: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  categoryIconContainer: {
+    backgroundColor: colors.primary,
+    borderRadius: '20px',
+    width: '64px',
+    height: '64px',
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  }),
-  backButtonText: (colors) => ({
-    color: colors.registerLink,
-    fontSize: 16,
-    fontWeight: '600',
-  }),
+    marginBottom: '8px',
+  },
+  categoryIcon: {
+    width: '32px',
+    height: '32px',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+  categoryLabel: {
+    fontSize: '14px',
+    color: colors.textSecondary,
+    fontWeight: '500',
+    margin: 0,
+  },
+  consultasSection: {
+      marginBottom: '32px',
+  },
+  consultaCard: {
+    backgroundColor: colors.cardBackground,
+    borderRadius: '24px',
+    padding: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    boxShadow: `0 4px 12px ${colors.cardShadow}`,
+  },
+  doctorImagePlaceholder: {
+    width: '60px',
+    height: '60px',
+    borderRadius: '16px',
+    backgroundColor: colors.primary,
+    marginRight: '16px',
+  },
+  doctorInfo: {
+    flexGrow: 1,
+  },
+  doctorName: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    margin: '0 0 4px 0',
+  },
+  doctorSpec: {
+    fontSize: '14px',
+    color: colors.textSecondary,
+    margin: 0,
+  },
+  arrowIcon: {
+    backgroundColor: colors.primary,
+    color: '#FFFFFF',
+    width: '32px',
+    height: '32px',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: 'bold',
+  },
+  navBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '80px',
+    backgroundColor: colors.navBackground,
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)',
+    borderTopLeftRadius: '24px',
+    borderTopRightRadius: '24px',
+  },
+  navIcon: {
+    width: '28px',
+    height: '28px',
+    backgroundColor: colors.textSecondary,
+    opacity: 0.7
+  },
+  navCenterButton: {
+    backgroundColor: colors.primary,
+    width: '64px',
+    height: '64px',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: 'translateY(-30px)',
+    boxShadow: `0 4px 12px ${colors.primary}55`,
+  },
+  navCenterIcon: {
+    width: '32px',
+    height: '32px',
+    backgroundColor: '#FFFFFF',
+  },
 });
 
 export default HomeScreen;

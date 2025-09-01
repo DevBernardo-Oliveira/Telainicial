@@ -4,16 +4,10 @@ import { lightColors, darkColors } from '../theme/colors';
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const toggleTheme = () => {
-    setIsDarkMode(prevMode => !prevMode);
-  };
-
-  const colors = isDarkMode ? darkColors : lightColors;
+  const colors = lightColors;
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, colors }}>
+    <ThemeContext.Provider value={{ colors }}>
       {children}
     </ThemeContext.Provider>
   );
