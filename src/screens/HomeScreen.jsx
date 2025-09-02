@@ -4,13 +4,13 @@ import { Image } from 'react-native';
 // Simulação do hook useTheme para o código ser executável
 const useTheme = () => ({
   colors: {
-    background: '#FEFBF6',
+    background: '#FFFAD9',
     textPrimary: '#3C3633',
     textSecondary: '#7D7C7C',
     primary: '#7F57F1',
     cardBackground: '#FFF7F1',
     cardShadow: 'rgba(0, 0, 0, 0.05)',
-    navBackground: '#FFFFFF',
+    navBackground: '#FEEEEE', // alterado de #FFFFFF para #FEEEEE
   }
 });
 
@@ -30,7 +30,7 @@ const HomeScreen = () => {
       <div style={styles.promoCard}>
         <div style={styles.promoTextContainer}>
           <h2 style={styles.promoTitle}>Visite nosso Website</h2>
-          <button style={styles.promoButton}>Clique Aqui</button>
+          <button type="button" style={styles.promoButton}>Clique Aqui</button>
         </div>
         {/* Placeholder para a imagem do card */}
         <Image source={require('../assets/DogCat.png')} style={styles.promoImage} />
@@ -68,13 +68,21 @@ const HomeScreen = () => {
 
       {/* Barra de Navegação Inferior */}
       <footer style={styles.navBar}>
-        <Image source={require('../assets/Pets.png')} style={styles.navIcon} />
-        <Image source={require('../assets/MaoBranca.png')} style={styles.navIcon} />
-        <div style={styles.navCenterButton}>
-          <Image source={require('../assets/Vector.png')} style={styles.navCenterIcon} />
+        <div style={styles.navIconContainer}>
+          <Image source={require('../assets/PetsPreto.png')} style={styles.navIcon} />
         </div>
-        <Image source={require('../assets/Veterinario.png')} style={styles.navIcon} />
-        <Image source={require('../assets/Configuracao.png')} style={styles.navIcon} />
+        <div style={styles.navIconContainer}>
+          <Image source={require('../assets/ConfiguracaoPreto.png')} style={styles.navIcon} />
+        </div>
+        <div style={styles.navCenterButton}>
+          <Image source={require('../assets/PataPreto.png')} style={styles.navCenterIcon} />
+        </div>
+        <div style={styles.navIconContainer}>
+          <Image source={require('../assets/VeterinarioPreto.png')} style={styles.navIcon} />
+        </div>
+        <div style={styles.navIconContainer}>
+          <Image source={require('../assets/ConfiguracaoPreto.png')} style={styles.navIcon} />
+        </div>
       </footer>
     </div>
   );
@@ -104,7 +112,12 @@ const CategoryButton = ({ icon, label, colors }) => {
   return (
     <div style={styles.categoryButton}>
       <div style={styles.categoryIconContainer}>
-        {imageSource && <Image source={imageSource} style={styles.categoryIcon} />}
+        {imageSource && (
+          <Image
+            source={imageSource}
+            style={icon === 'care' ? styles.categoryIconCare : styles.categoryIcon}
+          />
+        )}
       </div>
       <p style={styles.categoryLabel}>{label}</p>
     </div>
@@ -124,6 +137,7 @@ const getStyles = (colors) => ({
     boxSizing: 'border-box',
     position: 'relative',
     paddingBottom: '100px', // Espaço para a navbar
+    paddingTop: 'calc(24px + env(safe-area-inset-top, 0px))', // adiciona espaço responsivo para a área da câmera
   },
   header: {
     marginBottom: '24px',
@@ -157,12 +171,14 @@ const getStyles = (colors) => ({
     fontWeight: 'bold',
     margin: '0 0 16px 0',
   },
+  // Botão real (sem Rectangle.png)
   promoButton: {
     backgroundColor: '#FFFFFF',
     color: colors.primary,
     border: 'none',
     borderRadius: '16px',
-    padding: '10px 20px',
+    width: '150px',
+    height: '44px',
     fontWeight: 'bold',
     cursor: 'pointer',
   },
@@ -202,6 +218,7 @@ const getStyles = (colors) => ({
     alignItems: 'center',
     textAlign: 'center',
   },
+  // Quadrado roxo atrás do ícone de categoria (voltando ao que era antes)
   categoryIconContainer: {
     backgroundColor: colors.primary,
     borderRadius: '20px',
@@ -212,10 +229,17 @@ const getStyles = (colors) => ({
     alignItems: 'center',
     marginBottom: '8px',
   },
+  // Ícone sem fundo branco
   categoryIcon: {
     width: '32px',
     height: '32px',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    resizeMode: 'contain',
+  },
+  // Ícone maior apenas para "Cuidados"
+  categoryIconCare: {
+    width: '40px',
+    height: '40px',
+    resizeMode: 'contain',
   },
   categoryLabel: {
     fontSize: '14px',
@@ -281,27 +305,35 @@ const getStyles = (colors) => ({
     borderTopLeftRadius: '24px',
     borderTopRightRadius: '24px',
   },
-  navIcon: {
-    width: '28px',
-    height: '28px',
-    backgroundColor: colors.textSecondary,
-    opacity: 0.7
-  },
-  navCenterButton: {
-    backgroundColor: colors.primary,
-    width: '64px',
-    height: '64px',
-    borderRadius: '50%',
+  // Deixa os ícones laterais sem quadrado de fundo
+  navIconContainer: {
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    width: 'auto',
+    height: 'auto',
+    padding: 0,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    transform: 'translateY(-30px)',
+  },
+  navIcon: {
+    width: '28px',
+    height: '28px',
+  },
+  navCenterButton: {
+    backgroundColor: '#B77EFF',
+    width: '61px',
+    height: '45.77px',
+    borderRadius: '25px',
+    border: 'none', // removido o contorno branco
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     boxShadow: `0 4px 12px ${colors.primary}55`,
   },
   navCenterIcon: {
     width: '32px',
     height: '32px',
-    backgroundColor: '#FFFFFF',
   },
 });
 
