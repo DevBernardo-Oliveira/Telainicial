@@ -29,16 +29,7 @@ const CadastroScreen = () => {
 
   // Handles the "Cadastrar" (Register) button click.
   const handleRegister = () => {
-    console.log('Register button clicked!');
-    // In a real application, you would handle form submission here.
-    // For this example, we'll just log the form data.
-    console.log({
-
-      name,
-      email,
-      phone,
-      password,
-    });
+    navigation.navigate('HomeScreen');
   };
 
   const navigation = useNavigation();
@@ -140,7 +131,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: '#FFFFFF',
   }),
   fullScreenImage: {
     position: 'absolute',

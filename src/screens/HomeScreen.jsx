@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 
 // Simulação do hook useTheme para o código ser executável
 const useTheme = () => ({
@@ -33,7 +33,9 @@ const HomeScreen = () => {
           <button type="button" style={styles.promoButton}>Clique Aqui</button>
         </div>
         {/* Placeholder para a imagem do card */}
-        <Image source={require('../assets/DogCat.png')} style={styles.promoImage} />
+        <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('DogCat clicked')}>
+          <Image source={require('../assets/DogCat.png')} style={styles.promoImage} />
+        </TouchableOpacity>
       </div>
 
       {/* Seção de Categorias */}
@@ -69,19 +71,29 @@ const HomeScreen = () => {
       {/* Barra de Navegação Inferior */}
       <footer style={styles.navBar}>
         <div style={styles.navIconContainer}>
-          <Image source={require('../assets/PetsPreto.png')} style={styles.navIcon} />
+          <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('PetsPreto clicked')}>
+            <Image source={require('../assets/Pets.png')} style={styles.navIcon} />
+          </TouchableOpacity>
         </div>
         <div style={styles.navIconContainer}>
-          <Image source={require('../assets/ConfiguracaoPreto.png')} style={styles.navIcon} />
+          <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('ConfiguracaoPreto clicked')}>
+            <Image source={require('../assets/Configuracao.png')} style={styles.navIcon} />
+          </TouchableOpacity>
         </div>
         <div style={styles.navCenterButton}>
-          <Image source={require('../assets/PataPreto.png')} style={styles.navCenterIcon} />
+          <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('PataPreto clicked')}>
+            <Image source={require('../assets/PataPreto.png')} style={styles.navCenterIcon} />
+          </TouchableOpacity>
         </div>
         <div style={styles.navIconContainer}>
-          <Image source={require('../assets/VeterinarioPreto.png')} style={styles.navIcon} />
+          <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('VeterinarioPreto clicked')}>
+            <Image source={require('../assets/Veterinario.png')} style={styles.navIcon} />
+          </TouchableOpacity>
         </div>
         <div style={styles.navIconContainer}>
-          <Image source={require('../assets/ConfiguracaoPreto.png')} style={styles.navIcon} />
+          <TouchableOpacity activeOpacity={0.6} onPress={() => console.log('ConfiguracaoPreto clicked')}>
+            <Image source={require('../assets/Configuracao.png')} style={styles.navIcon} />
+          </TouchableOpacity>
         </div>
       </footer>
     </div>
@@ -113,10 +125,12 @@ const CategoryButton = ({ icon, label, colors }) => {
     <div style={styles.categoryButton}>
       <div style={styles.categoryIconContainer}>
         {imageSource && (
-          <Image
-            source={imageSource}
-            style={icon === 'care' ? styles.categoryIconCare : styles.categoryIcon}
-          />
+          <TouchableOpacity activeOpacity={0.6} onPress={() => console.log(`${icon} clicked`)}>
+            <Image
+              source={imageSource}
+              style={icon === 'care' ? styles.categoryIconCare : styles.categoryIcon}
+            />
+          </TouchableOpacity>
         )}
       </div>
       <p style={styles.categoryLabel}>{label}</p>
@@ -129,15 +143,15 @@ const CategoryButton = ({ icon, label, colors }) => {
 const getStyles = (colors) => ({
   container: {
     fontFamily: "'Inter', sans-serif",
-    backgroundColor: colors.background,
+    backgroundColor: '#FFFFFF',
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
     padding: '24px',
     boxSizing: 'border-box',
     position: 'relative',
-    paddingBottom: '100px', // Espaço para a navbar
-    paddingTop: 'calc(24px + env(safe-area-inset-top, 0px))', // adiciona espaço responsivo para a área da câmera
+    paddingBottom: '100px',
+    paddingTop: 'calc(24px + env(safe-area-inset-top, 0px))',
   },
   header: {
     marginBottom: '24px',
@@ -154,7 +168,7 @@ const getStyles = (colors) => ({
     margin: 0,
   },
   promoCard: {
-    backgroundColor: colors.primary,
+    backgroundImage: 'linear-gradient(rgb(163, 103, 240), rgb(141, 126, 251))',
     borderRadius: '24px',
     padding: '20px',
     display: 'flex',
@@ -262,7 +276,7 @@ const getStyles = (colors) => ({
     width: '60px',
     height: '60px',
     borderRadius: '16px',
-    backgroundColor: colors.primary,
+    backgroundImage: 'linear-gradient(rgb(163, 103, 240), rgb(141, 126, 251))',
     marginRight: '16px',
   },
   doctorInfo: {
@@ -297,7 +311,7 @@ const getStyles = (colors) => ({
     left: 0,
     right: 0,
     height: '80px',
-    backgroundColor: colors.navBackground,
+    backgroundImage: 'linear-gradient(rgb(163, 103, 240), rgb(141, 126, 251))',
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -321,7 +335,7 @@ const getStyles = (colors) => ({
     height: '28px',
   },
   navCenterButton: {
-    backgroundColor: '#B77EFF',
+    backgroundImage: 'linear-gradient(rgb(163, 103, 240), rgb(141, 126, 251))',
     width: '61px',
     height: '45.77px',
     borderRadius: '25px',

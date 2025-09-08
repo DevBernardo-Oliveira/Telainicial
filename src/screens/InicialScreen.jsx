@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: '#FFFFFF',
     padding: 16,
     position: 'relative',
     overflow: 'hidden',
